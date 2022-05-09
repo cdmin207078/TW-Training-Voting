@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Voting\Entities" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TW.Infrastructure.Core\TW.Infrastructure.Core.csproj" />
+      <ProjectReference Include="..\TW.Infrastructure.Domain\TW.Infrastructure.Domain.csproj" />
+    </ItemGroup>
+
+</Project>
