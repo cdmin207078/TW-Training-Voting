@@ -6,5 +6,5 @@ namespace TW.Training.Vote.Domain.Programmes;
 public class GetProgrammesInput
 {
     public CodeNumber CodeNumber { get; set; }
-    public DateTimeSpan creationDateTimeSpan { get; set; }
+    public DateTimeSpan CreationDateTimeSpan { get; set; }
 }

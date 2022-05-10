@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1700.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TW.Training.ConsoleApp", "TW.Training.ConsoleApp\TW.Training.ConsoleApp.csproj", "{DF94F4C7-6578-44AE-913A-59FF27A3D79B}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - Applications", "01 - Applications", "{E317CDC0-DD5F-44D0-A6A1-7DBF0F0BD5EA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - VotingCoreSystem", "02 - VotingCoreSystem", "{C42DC558-E56D-414D-8F27-E9456589AB8E}"
@@ -25,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF94F4C7-6578-44AE-913A-59FF27A3D79B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF94F4C7-6578-44AE-913A-59FF27A3D79B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF94F4C7-6578-44AE-913A-59FF27A3D79B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF94F4C7-6578-44AE-913A-59FF27A3D79B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F67F85A4-D4BE-43C6-BEE1-867A39090542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F67F85A4-D4BE-43C6-BEE1-867A39090542}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F67F85A4-D4BE-43C6-BEE1-867A39090542}.Release|Any CPU.ActiveCfg = Release|Any CPU

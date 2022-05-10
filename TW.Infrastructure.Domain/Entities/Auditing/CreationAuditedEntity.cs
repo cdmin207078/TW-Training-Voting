@@ -14,6 +14,12 @@ public abstract class CreationAuditedEntity : Entity, ICreationAuditedEntity
         CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
         CreationTime = DateTime.UtcNow;
     }
+
+    protected void SetCreation(Id<int> creatorId, DateTime creationTime)
+    {
+        CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
+        CreationTime = creationTime;
+    }
 }
 
 [Serializable]
@@ -36,5 +42,11 @@ public abstract class CreationAuditedEntity<TKey> : Entity<TKey>, ICreationAudit
     {
         CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
         CreationTime = DateTime.UtcNow;
+    }
+    
+    protected void SetCreation(Id<int> creatorId, DateTime creationTime)
+    {
+        CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
+        CreationTime = creationTime;
     }
 }

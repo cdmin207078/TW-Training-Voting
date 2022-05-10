@@ -57,8 +57,8 @@ public class ProgrammeService: IProgrammeService
         return _mapper.Map<GetProgrammeOutput>(programme);
     }
     
-    public Task<GetProgrammesOutput> GetProgrammes(GetProgrammesInput input)
+    public async Task<GetProgrammesOutput> GetProgrammes(GetProgrammesInput input)
     {
-        return _programmeRepository.Get(input);
+        return await _programmeRepository.Get(input);
     }
 }
