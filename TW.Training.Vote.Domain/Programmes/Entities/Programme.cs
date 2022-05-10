@@ -14,9 +14,9 @@ public class Programme : FullAuditedEntity<int>
 
     public Programme(CreateProgrammeInput input, IProgrammeRepository programmeRepository)
     {
-        if (input == null)
+        if (input is null)
             throw new ArgumentException(nameof(input));
-        if (programmeRepository == null)
+        if (programmeRepository is null)
             throw new ArgumentException(nameof(programmeRepository));
 
         SetCreation(input.CreatorId);
@@ -35,7 +35,7 @@ public class Programme : FullAuditedEntity<int>
     public CodeNumber Code { get; set; }
     public string Title { get; protected set; }
     public string Description { get; protected set; }
-    public int PerPersonMaxVotingCount { get; protected set; }
+    public int PersonalMaxVotingCount { get; protected set; }
 
     private readonly List<ProgrammeItem> _programmeItems = new();
     public IReadOnlyCollection<ProgrammeItem> ProgrammeItems => _programmeItems;
@@ -46,9 +46,9 @@ public class Programme : FullAuditedEntity<int>
     
     public async Task Update(UpdateProgrammeInput input, IProgrammeRepository programmeRepository)
     {
-        if (input == null)
+        if (input is null)
             throw new ArgumentException(nameof(input));
-        if (programmeRepository == null)
+        if (programmeRepository is null)
             throw new ArgumentException(nameof(programmeRepository));
 
         SetLastModified(input.LastModifierId);
@@ -89,7 +89,7 @@ public class Programme : FullAuditedEntity<int>
         if (count < 1)
             throw new ArgumentException("PerPersonVotingCount can't less than zero");
 
-        PerPersonMaxVotingCount = count;
+        PersonalMaxVotingCount = count;
     }
 
     private void SetProgrammeItems(List<CreateProgrammeInput.Item> items)
