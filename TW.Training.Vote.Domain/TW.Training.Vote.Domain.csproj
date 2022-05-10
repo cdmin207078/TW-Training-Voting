@@ -7,10 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Voting\Contracts\Out" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\TW.Infrastructure.Core\TW.Infrastructure.Core.csproj" />
       <ProjectReference Include="..\TW.Infrastructure.Domain\TW.Infrastructure.Domain.csproj" />
     </ItemGroup>
