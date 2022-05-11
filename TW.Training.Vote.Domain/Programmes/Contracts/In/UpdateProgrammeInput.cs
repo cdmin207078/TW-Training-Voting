@@ -1,4 +1,4 @@
-using TW.Infrastructure.Domain.Primitives;
+using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Training.Vote.Domain.Programmes;
 

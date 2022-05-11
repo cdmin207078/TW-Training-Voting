@@ -1,5 +1,5 @@
 ﻿using System;
-using TW.Infrastructure.Domain.Primitives;
+using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Infrastructure.Domain.Entities.Auditing;
 

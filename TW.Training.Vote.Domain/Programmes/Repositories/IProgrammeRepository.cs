@@ -1,4 +1,4 @@
-using TW.Infrastructure.Domain.Primitives;
+using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Training.Vote.Domain.Programmes;
 
@@ -11,7 +11,7 @@ public interface IProgrammeRepository
     Task<bool> IsExists(Id<int> id);
     Task<bool> IsExists(CodeNumber codeNumber);
     
-    Task<Programme> Get(Id<int> inputId);
+    Task<Programme> Get(Id<int> id);
     Task<Programme> Get(CodeNumber codeNumber);
     Task<GetProgrammesOutput> Get(GetProgrammesInput input);
 }

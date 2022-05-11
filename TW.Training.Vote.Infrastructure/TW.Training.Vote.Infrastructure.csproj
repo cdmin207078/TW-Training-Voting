@@ -6,4 +6,18 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="11.0.1" />
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+      <PackageReference Include="EasyCaching.InMemory" Version="1.6.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.5" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TW.Infrastructure.Domain\TW.Infrastructure.Domain.csproj" />
+      <ProjectReference Include="..\TW.Infrastructure.EFCore\TW.Infrastructure.EFCore.csproj" />
+      <ProjectReference Include="..\TW.Training.Vote.Domain\TW.Training.Vote.Domain.csproj" />
+    </ItemGroup>
+
 </Project>

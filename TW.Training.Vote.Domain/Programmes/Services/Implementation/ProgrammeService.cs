@@ -1,5 +1,5 @@
 using TW.Infrastructure.Core.Components;
-using TW.Infrastructure.Domain.Primitives;
+using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Training.Vote.Domain.Programmes;
 
@@ -35,12 +35,12 @@ public class ProgrammeService: IProgrammeService
 
     public async Task Delete(DeleteProgrammeInput input)
     {
-        if (input?.Id is null)
+        if (input?.CodeNumber is null)
             throw new ArgumentNullException(nameof(input));
 
-        var exists = await _programmeRepository.IsExists(input.Id);
+        var exists = await _programmeRepository.IsExists(input.CodeNumber);
         if(!exists)
-            throw new ArgumentNullException($"programme: {input.Id} not exist");
+            throw new ArgumentNullException($"programme: {input.CodeNumber} not exist");
 
         await _programmeRepository.Delete(input);
     }
