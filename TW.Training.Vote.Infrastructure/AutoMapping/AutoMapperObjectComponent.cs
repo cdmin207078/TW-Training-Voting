@@ -1,8 +1,9 @@
 using AutoMapper;
+using TW.Infrastructure.Core.Components;
 
 namespace TW.Training.Vote.Infrastructure.AutoMapping;
 
-public class AutoMapperObjectComponent
+public class AutoMapperObjectComponent : IObjectMapperComponent
 {
     private readonly IMapper _mapper;
 

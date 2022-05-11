@@ -1,0 +1,12 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ff4f2aab_002Dcd47_002D4b72_002D9cd6_002Dd63edd7fa764/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Test1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;Or&gt;
+    &lt;TestAncestor&gt;
+      &lt;TestId&gt;NUnit3x::C6E2659F-69F4-4663-9640-4130BDC2059A::net6.0::TW.Infrastructure.Domin.Test.Tests.Test1&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::44111165-99FC-40D5-8ACF-1CDE3E75F483::net6.0::TW.Infrastructure.Core.Test.Primitives.CodeNumberTest.Test1&lt;/TestId&gt;
+      &lt;TestId&gt;NUnit3x::44111165-99FC-40D5-8ACF-1CDE3E75F483::net6.0::TW.Infrastructure.Core.Test.Primitives.MobileNumberTest.Test1&lt;/TestId&gt;
+    &lt;/TestAncestor&gt;
+    &lt;Project Location="/Users/ning.chen/Documents/Projects/TW.Training/TW.Training.Vote.Domain.Test" Presentation="&amp;lt;02 - VotingCoreSystem&amp;gt;\&amp;lt;TW.Training.Vote.Domain.Test&amp;gt;" /&gt;
+    &lt;Project Location="/Users/ning.chen/Documents/Projects/TW.Training/TW.Infrastructure.Core.Test" Presentation="&amp;lt;03 - Shared&amp;gt;\&amp;lt;TW.Infrastructure.Core.Test&amp;gt;" /&gt;
+  &lt;/Or&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

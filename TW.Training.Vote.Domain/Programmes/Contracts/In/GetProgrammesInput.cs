@@ -4,7 +4,7 @@ using TW.Infrastructure.Domain.Pagination;
 
 namespace TW.Training.Vote.Domain.Programmes;
 
-public sealed class GetProgrammesInput : PaginationRequest
+public class GetProgrammesInput : PaginationRequest
 {
     public GetProgrammesInput(
         CodeNumber codeNumber,

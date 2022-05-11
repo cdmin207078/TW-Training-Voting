@@ -10,7 +10,7 @@ public class CodeNumber : AbstractPrimitiveObject<string>
     /// AA_01
     /// AA
     /// </summary>
-    private static readonly string REGEX_CODENUMBER_SCHEME = @"^[A-Za-z0-9_\-]$";
+    private static readonly string REGEX_CODENUMBER_SCHEME = @"^[A-Za-z0-9_\-]+$";
 
     public CodeNumber(string value) : base(value) { }
 
@@ -22,7 +22,7 @@ public class CodeNumber : AbstractPrimitiveObject<string>
         value = value.Trim();
 
         if (!Regex.IsMatch(value, REGEX_CODENUMBER_SCHEME))
-            throw new ArgumentException("CodeNumber is illegal");
+            throw new ArgumentException($"CodeNumber is illegal. can't set {value}");
 
         return value;
     }

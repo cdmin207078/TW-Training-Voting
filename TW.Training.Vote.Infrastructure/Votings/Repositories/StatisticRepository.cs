@@ -28,6 +28,7 @@ public class StatisticRepository : IStatisticRepository
 
     public Task<GetVotingFortuneOutput> GenerateVotingFortune(GetVotingFortuneInput input)
     {
+        // top 3 rating
         throw new NotImplementedException();
     }
 }
