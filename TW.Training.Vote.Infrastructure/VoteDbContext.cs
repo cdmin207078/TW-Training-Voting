@@ -14,7 +14,7 @@ public class VoteDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.Entity<ProgrammeItem>().ToTable("programme_items").HasKey(x => x.Id);
-        builder.Entity<Voting>().ToTable("votes").HasKey(x => x.Id);
+        builder.Entity<Voting>().ToTable("votings").HasKey(x => x.Id);
         
         builder.ApplyConfigurationsFromAssembly(typeof(VoteDbContext).Assembly);
     }

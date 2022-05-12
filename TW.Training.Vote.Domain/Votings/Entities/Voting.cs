@@ -9,7 +9,7 @@ public class Voting
 {
     #region Contructors
 
-    public Voting(CreateVotingInput input, IProgrammeRepository programmeRepository, IVotingRepository votingRepository)
+    public Voting(SubmitVotingInput input, IProgrammeRepository programmeRepository, IVotingRepository votingRepository)
     {
         if (input == null) 
             throw new ArgumentNullException(nameof(input));
@@ -69,7 +69,7 @@ public class Voting
         var remainVotingCount = Programme.PersonalMaxVotingCount - existVotingCount;
         if (remainVotingCount == 0)
             throw new ArgumentException($"Dear: {MobilePhoneNumber}, you are already complete voting for {Programme.Title}. can not repeat voting");
-        if (remainVotingCount != programmeItems.Count)
+        if (remainVotingCount < programmeItems.Count)
             throw new ArgumentException($"Dear: {MobilePhoneNumber} remaining have {remainVotingCount} left to voting. please check your voting items count");
 
         var expects = programmeItems.Except(Programme.ProgrammeItems.Select(x => x.Code).ToList());

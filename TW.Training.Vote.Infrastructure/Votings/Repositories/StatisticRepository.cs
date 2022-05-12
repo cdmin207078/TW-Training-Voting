@@ -26,9 +26,29 @@ public class StatisticRepository : IStatisticRepository
         return new GetVotingStatisticOutput { Items = items };
     }
 
-    public Task<GetVotingFortuneOutput> GenerateVotingFortune(GetVotingFortuneInput input)
+    public async Task<GetVotingFortuneOutput> GenerateVotingFortune(GetVotingFortuneInput input)
     {
-        // top 3 rating
-        throw new NotImplementedException();
+        var top3VotingItmes = await _ctx.Votings
+            .Where(x => x.ProgrammeItem.Programme.Code == input.ProgrammeCodeNumber.Value)
+            .GroupBy(x => x.ProgrammeItem.Code)
+            .OrderByDescending(x => x.Count())
+            .Take(3)
+            .Select(x => x.FirstOrDefault().ProgrammeItem.Code)
+            .ToListAsync();
+
+        var top3fortuner = await _ctx.Votings
+            .Where(x => x.ProgrammeItem.Programme.Code == input.ProgrammeCodeNumber.Value && top3VotingItmes.Contains(x.ProgrammeItem.Code))
+            .Select(x => x.MobilePhoneNumber)
+            .Distinct()
+            .OrderBy(x => EF.Functions.Random())
+            .Take(3)
+            .ToListAsync();
+        
+        var result = new GetVotingFortuneOutput
+        {
+            FortunerMobilePhoneNumber = top3fortuner
+        };
+
+        return result;
     }
 }

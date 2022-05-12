@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TW.Infrastructure.Core.Primitives;
 using TW.Training.Vote.Domain.Votings;
 using TW.Training.Vote.WebApi.Models.Votings;
 
@@ -16,22 +17,38 @@ public class VotingController : ControllerBase
         _votingService = votingService;
         _statisticService = statisticService;
     }
-    
+
     [HttpPost("{programmeCode}")]
-    public async Task<IActionResult> SubmitVoting(string programmeCode, SubmitVotingRequest request)
+    public async Task<IActionResult> SubmitVoting([FromRoute] string programmeCode, SubmitVotingRequest request)
     {
-        return Ok("welcome");
+        var input = new SubmitVotingInput
+        {
+            Name = request.UserName,
+            MobilePhoneNumber = new MobilePhoneNumber(request.UserMobilePhoneNumber),
+            ProgrammeCodeNumber = new CodeNumber(programmeCode),
+            ProgrammeItemCodeNumbers = request.VotingCodeNumbers.Select(x => new CodeNumber(x)).ToList()
+        };
+
+        await _votingService.Voting(input);
+
+        return Ok("voting success");
     }
-    
+
     [HttpGet("{programmeCode}/statistic")]
-    public async Task<IActionResult> GetVotingStatistic(string programmeCode)
+    public async Task<IActionResult> GetVotingStatistic([FromRoute] string programmeCode)
     {
-        return Ok("welcome");
+        var input = new GetVotingStatisticInput(new CodeNumber(programmeCode));
+        var result = await _statisticService.GetVotingStatistic(input);
+        
+        return Ok(result);
     }
 
     [HttpGet("{programmeCode}/fortune")]
-    public async Task<IActionResult> GetVotingFortune(string programmeCode)
+    public async Task<IActionResult> GetVotingFortune([FromRoute] string programmeCode)
     {
-        return Ok("welcome");
+        var input = new GetVotingFortuneInput(new CodeNumber(programmeCode));
+        var result = await _statisticService.GenerateVotingFortune(input);
+        
+        return Ok(result);
     }
 }

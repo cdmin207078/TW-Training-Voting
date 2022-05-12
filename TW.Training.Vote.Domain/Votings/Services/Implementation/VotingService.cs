@@ -13,7 +13,7 @@ public class VotingService : IVotingService
         _programmeRepository = programmeRepository;
     }
     
-    public async Task Voting(CreateVotingInput input)
+    public async Task Voting(SubmitVotingInput input)
     {
         var voting = new Voting(input, _programmeRepository, _votingRepository);
         await _votingRepository.Voting(voting);

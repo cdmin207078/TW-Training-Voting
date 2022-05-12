@@ -43,9 +43,8 @@ public abstract class EntityframeworkRepositoryAbstract
     public void Remove<TEntity>(TEntity entity) where TEntity : AbstractModelObject
     {
         entity.IsNullThrowException();
-    
-        dbContext./*Set<TEntity>().*/Remove(entity);
-        dbContext.Set<TEntity>().Attach(entity).State = EntityState.Deleted;
+
+        dbContext.Entry(entity).State = EntityState.Deleted;
     }
     
     public void Remove<TEntity>(List<TEntity> entities) where TEntity : AbstractModelObject
@@ -61,13 +60,6 @@ public abstract class EntityframeworkRepositoryAbstract
     #endregion
 
     #region Update
-
-    public void Update<TEntity>(TEntity entity) where TEntity : AbstractModelObject
-    {
-        entity.IsNullThrowException();
-
-        dbContext.Set<TEntity>().Update(entity);
-    }
 
     public void Update<TEntity>(TEntity source, TEntity destination) where TEntity : AbstractModelObject
     {
