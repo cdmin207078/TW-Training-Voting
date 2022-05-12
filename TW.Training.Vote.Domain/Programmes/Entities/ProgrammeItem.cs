@@ -26,7 +26,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     //     Description = input.Description.Trim();
     // }
 
-    public ProgrammeItem(CreateProgrammeInput.Item input, Id<int> creatorId)
+    public ProgrammeItem(CreateProgrammeInput.Item input, Programme programme, Id<int> creatorId)
     {
         if (input == null) 
             throw new ArgumentNullException(nameof(input));
@@ -36,7 +36,8 @@ public class ProgrammeItem: FullAuditedEntity<int>
         SetTitle(input.Title);
         SetCode(input.Code);
         
-        Description = input.Description.Trim();
+        Description = input.Description?.Trim();
+        Programme = programme;
     }
 
     #endregion
@@ -44,9 +45,11 @@ public class ProgrammeItem: FullAuditedEntity<int>
     #region Propertities
 
     public int Order { get; protected set; }
-    public CodeNumber Code { get; protected set; }
     public string Title { get; protected set; }
     public string Description { get; protected set; }
+    
+    public CodeNumber Code { get; protected set; }
+    public Programme Programme { get; protected set; }
     
     #endregion
     
@@ -77,7 +80,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
         SetOrder(input.Order); 
         SetCode(input.Code);
         
-        Description = input.Description.Trim();
+        Description = input.Description?.Trim();
     }
 
     private void SetOrder(int order)

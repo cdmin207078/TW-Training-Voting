@@ -8,7 +8,7 @@ public interface IProgrammeService
     Task Update(UpdateProgrammeInput input);
     Task Delete(DeleteProgrammeInput input);
 
-    // Task<GetProgrammeOutput> GetProgramme(Id<int> Id);
+    Task<GetProgrammeOutput> GetProgramme(Id<int> Id);
     Task<GetProgrammeOutput> GetProgramme(CodeNumber code);
     Task<GetProgrammesOutput> GetProgrammes(GetProgrammesInput input);
 }

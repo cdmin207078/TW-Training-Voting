@@ -7,7 +7,8 @@ public class ProgrammeItem : FullAuditedObject<int>
 {
     public string Code { get; set; }
     public string Title { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
+    public int Order { get; set; }
 
     public Programme Programme { get; set; }
     public List<Voting> Votings { get; set; }

@@ -29,8 +29,6 @@ public class ProgrammeRepository : EntityframeworkRepositoryAbstract, IProgramme
 
     public async Task Update(Programme programme)
     {
-        programme?.Id.IsNullThrowException();
-
         var source = await _ctx.Programmes
                                .Include(x => x.ProgrammeItems)
                                .AsSplitQuery()
@@ -40,16 +38,26 @@ public class ProgrammeRepository : EntityframeworkRepositoryAbstract, IProgramme
 
         Update(source, destination);
         Update(source.ProgrammeItems, destination.ProgrammeItems);
-
+        
         await SaveChanges();
     }
 
-    public Task Delete(DeleteProgrammeInput input)
+    public async Task Delete(DeleteProgrammeInput input)
     {
-        var programme = Get(input.CodeNumber);
-
-        _ctx.Remove(programme);
-        return _ctx.SaveChangesAsync();
+        var programme = await _ctx.Programmes
+            .Include(x => x.ProgrammeItems)
+            .AsSplitQuery()
+            .Where(x => x.Id == input.Id.Value)
+            .Select(x => new PO.Programme
+            {
+                Id = x.Id,
+                ProgrammeItems = x.ProgrammeItems.Select(i => new PO.ProgrammeItem { Id = i.Id }).ToList()
+            })
+            .FirstOrDefaultAsync();
+        
+        _ctx.Programmes.Remove(programme);
+        
+        await _ctx.SaveChangesAsync();
     }
 
     public Task<bool> IsExists(Id<int> id)
@@ -90,6 +98,7 @@ public class ProgrammeRepository : EntityframeworkRepositoryAbstract, IProgramme
         
         var (count, items) = await QueryPagination(query.Select(x => new GetProgrammesOutput.Item
         {
+            Id = x.Id,
             Code = x.Code,
             Title = x.Title,
             Description = x.Description,

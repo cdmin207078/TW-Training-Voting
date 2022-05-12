@@ -31,7 +31,7 @@ public class ProgrammeEntityTypeConfiguration : IEntityTypeConfiguration<Program
     public void Configure(EntityTypeBuilder<Programme> builder)
     {
         builder.ToTable("programmes").HasKey(x => x.Id);
-        builder.HasMany(x => x.ProgrammeItems).WithOne(x => x.Programme);
+        builder.HasMany(x => x.ProgrammeItems);
     }
 }
 

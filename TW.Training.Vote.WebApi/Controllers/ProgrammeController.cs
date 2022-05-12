@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using TW.Infrastructure.Core.Components;
 using TW.Infrastructure.Core.Primitives;
 using TW.Infrastructure.Domain.Models;
+using TW.Infrastructure.Domain.WebWorkContext;
 using TW.Training.Vote.Domain.Programmes;
 using TW.Training.Vote.WebApi.Models.Programmes;
 
@@ -10,29 +12,67 @@ namespace TW.Training.Vote.WebApi.Controllers;
 [Route("api/programmes")]
 public class ProgrammeController : ControllerBase
 {
+    private readonly IObjectMapperComponent _mapper;
     private readonly IProgrammeService _programmeService;
+    private readonly WebWorkContext _webWorkContext;
 
-    public ProgrammeController(IProgrammeService programmeService)
+    public ProgrammeController(IProgrammeService programmeService,IObjectMapperComponent mapper, WebWorkContext webWorkContext)
     {
         _programmeService = programmeService;
+        _mapper = mapper;
+        _webWorkContext = webWorkContext;
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateProgrammeRequest request)
     {
-        return Ok();
+        // var input = new CreateProgrammeInput
+        // {
+        //     Code = new CodeNumber(request.Code),
+        //     Title = request.Title,
+        //     Description = request.Description,
+        //     PerPersonMaxVotingCount = request.PerPersonMaxVotingCount,
+        //     CreatorId = _webWorkContext.User?.Id ?? new Id<int>(1),
+        //     Items = request.Items?.Select(x => new CreateProgrammeInput.Item
+        //     {
+        //         Code = new CodeNumber(x.Code),
+        //         Title = x.Title,
+        //         Description = x.Description,
+        //         Order = x.Order
+        //     }).ToList()
+        // };
+        
+        var input = _mapper.Map<CreateProgrammeInput>(request);
+        input.CreatorId = _webWorkContext.User?.Id ?? new Id<int>(1);
+       
+        await _programmeService.Create(input);
+        
+        return Ok("create success");
     }
 
-    [HttpDelete("{programmeCode}")]
-    public async Task<IActionResult> Delete([FromRoute] string programmeCode)
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete([FromRoute] int id)
     {
-        return Ok();
+        var input = new DeleteProgrammeInput
+        {
+            Id = new Id<int>(id)
+        };
+        
+        await _programmeService.Delete(input);
+        
+        return Ok("delete success");
     }
     
-    [HttpPut("{programmeCode}")]
-    public async Task<IActionResult> Update([FromRoute] string programmeCode, UpdateProgrammeRequest request)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update([FromRoute] int id, UpdateProgrammeRequest request)
     {
-        return Ok();
+        var input = _mapper.Map<UpdateProgrammeInput>(request);
+        input.Id = new Id<int>(id);
+        input.LastModifierId = _webWorkContext.User?.Id ?? new Id<int>(1);
+        
+        await _programmeService.Update(input);
+        
+        return Ok("update success");
     }
     
     [HttpGet]
@@ -52,9 +92,17 @@ public class ProgrammeController : ControllerBase
         return Ok(result);
     }
     
-    [HttpGet("{programmeCode}")]
+    [HttpGet("d-{id}")]
+    public async Task<IActionResult> Get([FromRoute] int id)
+    {
+        var result = await _programmeService.GetProgramme(new Id<int>(id));
+        return Ok(result);
+    }
+    
+    [HttpGet("c-{programmeCode}")]
     public async Task<IActionResult> Get([FromRoute] string programmeCode)
     {
-        return Ok(programmeCode);
+        var result = await _programmeService.GetProgramme(new CodeNumber(programmeCode));
+        return Ok(result);
     }
 }

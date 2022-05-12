@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using TW.Infrastructure.Core.AbstractModelObjects;
 using TW.Infrastructure.Core.Primitives;
-
-// using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Infrastructure.EFCore.Repository;
 
@@ -75,40 +74,61 @@ public abstract class EntityframeworkRepositoryAbstract
         source.IsNullThrowException();
         destination.IsNullThrowException();
 
-        dbContext.Set<TEntity>().Attach(source).CurrentValues.SetValues(destination);
-        //_ctx.Entry(source).CurrentValues.SetValues(destination);
+        // dbContext.Set<TEntity>().Attach(source).CurrentValues.SetValues(destination);
+        dbContext.Entry(source).State = EntityState.Unchanged;
+        dbContext.Entry(source).CurrentValues.SetValues(destination);
     }
-
-    //public void Update<TEntity>(TEntity entity, params Expression<Func<TEntity, object>>[] properties)
-    //    where TEntity : AbstractModelObject
-    //{
-    //    entity.IsNullThrowException();
-    //    properties.IsNullThrowException();
-
-    //    var entry = _ctx.Attach(entity);
-    //    foreach (var property in properties)
-    //    {
-    //        entry.Property(property).IsModified = true;
-    //    }
-    //}
-
+    
     public void Update<TEntity>(List<TEntity> sources, List<TEntity> destination) where TEntity : AbstractModelObject
     {
         sources.IsNullThrowException();
         destination.IsNullThrowException();
-
-        // 1. add
-        foreach (var d in destination)
+        
+        // // 1. attach
+        // foreach (var dest in destination)
+        // {
+        //     if()
+        // }
+        // dbContext.AttachRange(destination);
+        
+        // 2. remove or update
+        // sources.RemoveAll(s => !destination.Any(d => d.Equals(s)));
+        // foreach (var source in sources)
+        // {
+        //     var dest = destination.FirstOrDefault(x => source.Equals(x));
+        //     if (dest is null)
+        //         dbContext.Entry(source).State = EntityState.Deleted;
+        //     else
+        //         dbContext.Entry(source).CurrentValues.SetValues(dest);
+        // }
+        
+        // 1. remove
+        // sources.RemoveAll(s => !destination.Any(d => d.Equals(s)));
+        foreach (var source in sources)
         {
-            if (!sources.Any(s => s.Equals(d)))
+            if (!destination.Any(x => source.Equals(x)))
+                dbContext.Entry(source).State = EntityState.Deleted;
+        }
+        
+        // 2. add or update
+        foreach (var dest in destination)
+        {
+            var source = sources.FirstOrDefault(x => x.Equals(dest));
+        
+            if (source is null)
             {
-                dbContext.Attach(d);
-                sources.Add(d);
+                dbContext.Entry(dest).State = EntityState.Added;
+                // if (dbContext.Entry(dest).State is not EntityState.Added)
+                // {
+                //     dbContext.Set<TEntity>().Attach(dest);
+                // }
+            }
+            else
+            {
+                dbContext.Entry(source).State = EntityState.Unchanged;
+                dbContext.Entry(source).CurrentValues.SetValues(dest);
             }
         }
-
-        // 2. remove
-        sources.RemoveAll(s => !destination.Any(d => d.Equals(s)));
     }
 
     #endregion

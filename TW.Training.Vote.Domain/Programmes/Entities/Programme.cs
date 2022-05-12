@@ -25,7 +25,7 @@ public class Programme : FullAuditedEntity<int>
         SetProgrammeItems(input.Items);
         SetCode(input.Code, programmeRepository).GetAwaiter().GetResult();
 
-        Description = input.Description.Trim();
+        Description = input.Description?.Trim();
     }
 
     #endregion
@@ -57,7 +57,7 @@ public class Programme : FullAuditedEntity<int>
         SetProgrammeItems(input.Items);
         await SetCode(input.Code, programmeRepository);
 
-        Description = input.Description.Trim();
+        Description = input.Description?.Trim();
     }
 
     private async Task SetCode(CodeNumber code, IProgrammeRepository programmeRepository)
@@ -104,7 +104,7 @@ public class Programme : FullAuditedEntity<int>
 
         foreach (var item in items)
         {
-            var programmeItem = new ProgrammeItem(item, CreatorId);
+            var programmeItem = new ProgrammeItem(item, this, CreatorId);
             _programmeItems.Add(programmeItem);
         }
     }
@@ -123,12 +123,12 @@ public class Programme : FullAuditedEntity<int>
             throw new ArgumentException($"duplicate item code:{duplicatedCodeNumber}");
         
         // removing
-        _programmeItems.RemoveAll(x => !items.Any(z => z.Id.Equals(x.Id)));
+        _programmeItems.RemoveAll(x => !items.Any(y => x.Id.Equals(y.Id)));
 
         // update or add
         foreach (var item in items)
         {
-            var programmeItem = _programmeItems.FirstOrDefault(x => x.Id.Equals(item.Id));
+            var programmeItem = _programmeItems.FirstOrDefault(x => x.Id?.Equals(item.Id) ?? false);
             if (programmeItem is null)
             {
                 var data = new CreateProgrammeInput.Item
@@ -138,7 +138,7 @@ public class Programme : FullAuditedEntity<int>
                     Order = item.Order,
                     Description = item.Description
                 };
-                _programmeItems.Add(new ProgrammeItem(data, LastModifierId));
+                _programmeItems.Add(new ProgrammeItem(data, this, LastModifierId));
             }
             else
             {

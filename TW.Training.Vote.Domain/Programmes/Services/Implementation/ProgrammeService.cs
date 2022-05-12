@@ -35,21 +35,21 @@ public class ProgrammeService: IProgrammeService
 
     public async Task Delete(DeleteProgrammeInput input)
     {
-        if (input?.CodeNumber is null)
+        if (input?.Id is null)
             throw new ArgumentNullException(nameof(input));
 
-        var exists = await _programmeRepository.IsExists(input.CodeNumber);
+        var exists = await _programmeRepository.IsExists(input.Id);
         if(!exists)
-            throw new ArgumentNullException($"programme: {input.CodeNumber} not exist");
+            throw new ArgumentNullException($"programme: {input.Id} not exist");
 
         await _programmeRepository.Delete(input);
     }
-
-    // public async Task<GetProgrammeOutput> GetProgramme(Id<int> id)
-    // {
-    //     var programme = await _programmeRepository.Get(id);
-    //     return _mapper.Map<GetProgrammeOutput>(programme);
-    // }
+    
+    public async Task<GetProgrammeOutput> GetProgramme(Id<int> id)
+    {
+        var programme = await _programmeRepository.Get(id);
+        return _mapper.Map<GetProgrammeOutput>(programme);
+    }
 
     public async Task<GetProgrammeOutput> GetProgramme(CodeNumber codeNumber)
     {
