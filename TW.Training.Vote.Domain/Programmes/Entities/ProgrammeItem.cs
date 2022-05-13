@@ -1,3 +1,4 @@
+using TW.Infrastructure.Core.Exceptions;
 using TW.Infrastructure.Domain.Entities.Auditing;
 using TW.Infrastructure.Core.Primitives;
 
@@ -14,9 +15,9 @@ public class ProgrammeItem: FullAuditedEntity<int>
     // public ProgrammeItem(CreateProgrammeItemInput input, IProgrammeRepository programmeRepository)
     // {
     //     if (input == null) 
-    //         throw new ArgumentException(nameof(input));
+    //         throw new TWException(nameof(input));
     //     if (programmeRepository == null)
-    //         throw new ArgumentException(nameof(programmeRepository));
+    //         throw new TWException(nameof(programmeRepository));
     //
     //     SetCreation(input.CreatorId);
     //     SetOrder(input.Order);
@@ -29,7 +30,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     public ProgrammeItem(CreateProgrammeInput.Item input, Programme programme, Id<int> creatorId)
     {
         if (input == null) 
-            throw new ArgumentNullException(nameof(input));
+            throw new TWException(nameof(input));
         
         SetCreation(creatorId);
         SetOrder(input.Order);
@@ -58,9 +59,9 @@ public class ProgrammeItem: FullAuditedEntity<int>
     // public async Task Update(CreateProgrammeItemInput input, IProgrammeRepository programmeRepository)
     // {
     //     if (input == null) 
-    //         throw new ArgumentException(nameof(input));
+    //         throw new TWException(nameof(input));
     //     if (programmeRepository == null)
-    //         throw new ArgumentException(nameof(programmeRepository)); 
+    //         throw new TWException(nameof(programmeRepository)); 
     //     
     //     SetLastModified(input.LastModifierId);
     //     SetTitle(input.Title);
@@ -73,7 +74,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     public void Update(UpdateProgrammeInput.Item input, Id<int> lastModifierId)
     {
         if (input == null)
-            throw new ArgumentException(nameof(input));
+            throw new TWException(nameof(input));
         
         SetLastModified(lastModifierId);
         SetTitle(input.Title);
@@ -86,7 +87,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     private void SetOrder(int order)
     {
         if (order < 0)
-            throw new ArgumentException("order can can't less than zero");
+            throw new TWException("order can can't less than zero");
         
         Order = order;
     }
@@ -94,7 +95,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     private void SetTitle(string title)
     {
         if (string.IsNullOrEmpty(title))
-            throw new ArgumentException("title can not be null or empty");
+            throw new TWException("title can not be null or empty");
 
         Title = title.Trim();
     }
@@ -102,7 +103,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     private void SetCode(CodeNumber code)
     {
         if (code is null)
-            throw new ArgumentException("code can not be null or empty");
+            throw new TWException("code can not be null or empty");
 
         Code = code;
     }
@@ -110,7 +111,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     private async Task SetCode(CodeNumber code, IProgrammeRepository programmeRepository)
     {
         if(code is null)
-            throw new ArgumentException("code can not be null or empty");
+            throw new TWException("code can not be null or empty");
         
         // if unchanged
         if (code.Equals(Code)) 
@@ -118,7 +119,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
 
         var exists = await programmeRepository.IsExists(code);
         if (exists)
-            throw new ArgumentException("code is exists");
+            throw new TWException("code is exists");
 
         Code = code;
     }

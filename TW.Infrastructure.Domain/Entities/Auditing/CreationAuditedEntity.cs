@@ -1,4 +1,5 @@
 ﻿using System;
+using TW.Infrastructure.Core.Exceptions;
 using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Infrastructure.Domain.Entities.Auditing;
@@ -11,13 +12,13 @@ public abstract class CreationAuditedEntity : Entity, ICreationAuditedEntity
 
     protected void SetCreation(Id<int> creatorId)
     {
-        CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
+        CreatorId = creatorId ?? throw new TWException(nameof(creatorId));
         CreationTime = DateTime.UtcNow;
     }
 
     protected void SetCreation(Id<int> creatorId, DateTime creationTime)
     {
-        CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
+        CreatorId = creatorId ?? throw new TWException(nameof(creatorId));
         CreationTime = creationTime;
     }
 }
@@ -40,13 +41,13 @@ public abstract class CreationAuditedEntity<TKey> : Entity<TKey>, ICreationAudit
 
     protected void SetCreation(Id<int> creatorId)
     {
-        CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
+        CreatorId = creatorId ?? throw new TWException(nameof(creatorId));
         CreationTime = DateTime.UtcNow;
     }
     
     protected void SetCreation(Id<int> creatorId, DateTime creationTime)
     {
-        CreatorId = creatorId ?? throw new ArgumentNullException(nameof(creatorId));
+        CreatorId = creatorId ?? throw new TWException(nameof(creatorId));
         CreationTime = creationTime;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using TW.Infrastructure.Core.Exceptions;
 using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Infrastructure.Domain.Entities.Auditing;
@@ -11,7 +12,7 @@ public abstract class AuditedEntity : CreationAuditedEntity, IAuditedEntity
 
     protected void SetLastModified(Id<int> lastModifierId)
     {
-        LastModifierId = lastModifierId ?? throw new ArgumentNullException(nameof(lastModifierId));
+        LastModifierId = lastModifierId ?? throw new TWException(nameof(lastModifierId));
         LastModificationTime = DateTime.UtcNow;
     }
 }
@@ -34,7 +35,7 @@ public abstract class AuditedEntity<TKey> : CreationAuditedEntity<TKey>, IAudite
 
     protected void SetLastModified(Id<int> lastModifierId)
     {
-        LastModifierId = lastModifierId ?? throw new ArgumentNullException(nameof(lastModifierId));
+        LastModifierId = lastModifierId ?? throw new TWException(nameof(lastModifierId));
         LastModificationTime = DateTime.UtcNow;
     }
 }

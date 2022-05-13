@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using TW.Infrastructure.Core.Exceptions;
 
 namespace TW.Infrastructure.Core.Primitives;
 
@@ -22,12 +23,12 @@ public class MobilePhoneNumber : AbstractPrimitiveObject<string>
     protected override string TryGetValue(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("MobilPhoneNumber cannot be null or empty.");
+            throw new TWException("MobilPhoneNumber cannot be null or empty.");
 
         value = value.Trim();
 
         if (!Regex.IsMatch(value, REGEX_MOBILE_SCHEME))
-            throw new ArgumentException("MobilPhoneNumber is illegal");
+            throw new TWException("MobilPhoneNumber is illegal");
 
         return value;
     }

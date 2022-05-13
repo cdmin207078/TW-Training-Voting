@@ -1,5 +1,4 @@
-using TW.Infrastructure.Domain.Entities;
-using TW.Infrastructure.Domain.Entities.Auditing;
+using TW.Infrastructure.Core.Exceptions;
 using TW.Infrastructure.Core.Primitives;
 using TW.Training.Vote.Domain.Programmes;
 
@@ -12,11 +11,11 @@ public class Voting
     public Voting(SubmitVotingInput input, IProgrammeRepository programmeRepository, IVotingRepository votingRepository)
     {
         if (input == null) 
-            throw new ArgumentNullException(nameof(input));
+            throw new TWException(nameof(input));
         if (programmeRepository == null) 
-            throw new ArgumentNullException(nameof(programmeRepository));
+            throw new TWException(nameof(programmeRepository));
         if (votingRepository == null) 
-            throw new ArgumentNullException(nameof(votingRepository));
+            throw new TWException(nameof(votingRepository));
 
         SetMobilePhoneNumber(input.MobilePhoneNumber);
         SetProgramme(input.ProgrammeCodeNumber, programmeRepository).GetAwaiter().GetResult();
@@ -42,7 +41,7 @@ public class Voting
     private void SetMobilePhoneNumber(MobilePhoneNumber mobilePhoneNumber)
     {
         if (mobilePhoneNumber is null) 
-            throw new ArgumentNullException(nameof(mobilePhoneNumber));
+            throw new TWException(nameof(mobilePhoneNumber));
         
         MobilePhoneNumber = mobilePhoneNumber;
     }
@@ -50,11 +49,11 @@ public class Voting
     private async Task SetProgramme(CodeNumber codeNumber,IProgrammeRepository programmeRepository)
     {
         if (codeNumber is null)
-            throw new ArgumentNullException(nameof(codeNumber));
+            throw new TWException(nameof(codeNumber));
 
         var programme = await programmeRepository.Get(codeNumber);
         if (programme is null)
-            throw new ArgumentException($"can't find Programme:{codeNumber}");
+            throw new TWException($"can't find Programme:{codeNumber}");
 
         Programme = programme;
     }
@@ -62,19 +61,19 @@ public class Voting
     private async Task SetProgrammeItems(List<CodeNumber> programmeItems, IVotingRepository votingRepository)
     {
         if (programmeItems is null || !programmeItems.Any())
-            throw new ArgumentNullException($"voting can not be null or empty");
+            throw new TWException($"voting can not be null or empty");
         
         // validate voting count
         var existVotingCount = await votingRepository.GetVotingCount(MobilePhoneNumber, Programme.Code);
         var remainVotingCount = Programme.PersonalMaxVotingCount - existVotingCount;
         if (remainVotingCount == 0)
-            throw new ArgumentException($"Dear: {MobilePhoneNumber}, you are already complete voting for {Programme.Title}. can not repeat voting");
+            throw new TWException($"Dear: {MobilePhoneNumber}, you are already complete voting for {Programme.Title}. can not repeat voting");
         if (remainVotingCount < programmeItems.Count)
-            throw new ArgumentException($"Dear: {MobilePhoneNumber} remaining have {remainVotingCount} left to voting. please check your voting items count");
+            throw new TWException($"Dear: {MobilePhoneNumber} remaining have {remainVotingCount} left to voting. please check your voting items count");
 
         var expects = programmeItems.Except(Programme.ProgrammeItems.Select(x => x.Code).ToList());
         if (expects.Any())
-            throw new ArgumentException($"unknown programme item: {string.Join(',', expects)}");
+            throw new TWException($"unknown programme item: {string.Join(',', expects)}");
 
         VoteItems = Programme.ProgrammeItems.Where(x => programmeItems.Any(c => c.Equals(x.Code))).ToList();
     }

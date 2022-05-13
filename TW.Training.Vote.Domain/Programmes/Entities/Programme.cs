@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using TW.Infrastructure.Core.Exceptions;
 using TW.Infrastructure.Domain.Entities.Auditing;
 using TW.Infrastructure.Core.Primitives;
 
@@ -15,9 +16,9 @@ public class Programme : FullAuditedEntity<int>
     public Programme(CreateProgrammeInput input, IProgrammeRepository programmeRepository)
     {
         if (input is null)
-            throw new ArgumentException(nameof(input));
+            throw new TWException(nameof(input));
         if (programmeRepository is null)
-            throw new ArgumentException(nameof(programmeRepository));
+            throw new TWException(nameof(programmeRepository));
 
         SetCreation(input.CreatorId);
         SetTitle(input.Title);
@@ -47,9 +48,9 @@ public class Programme : FullAuditedEntity<int>
     public async Task Update(UpdateProgrammeInput input, IProgrammeRepository programmeRepository)
     {
         if (input is null)
-            throw new ArgumentException(nameof(input));
+            throw new TWException(nameof(input));
         if (programmeRepository is null)
-            throw new ArgumentException(nameof(programmeRepository));
+            throw new TWException(nameof(programmeRepository));
 
         SetLastModified(input.LastModifierId);
         SetTitle(input.Title);
@@ -63,7 +64,7 @@ public class Programme : FullAuditedEntity<int>
     private async Task SetCode(CodeNumber code, IProgrammeRepository programmeRepository)
     {
         if (code is null)
-            throw new ArgumentException("code can not be null or empty");
+            throw new TWException("code can not be null or empty");
 
         // if unchanged
         if (code.Equals(Code))
@@ -71,7 +72,7 @@ public class Programme : FullAuditedEntity<int>
 
         var exists = await programmeRepository.IsExists(code);
         if (exists)
-            throw new ArgumentException("code is exists");
+            throw new TWException("code is exists");
 
         Code = code;
     }
@@ -79,7 +80,7 @@ public class Programme : FullAuditedEntity<int>
     private void SetTitle(string title)
     {
         if (string.IsNullOrEmpty(title))
-            throw new ArgumentException("title can not be null or empty");
+            throw new TWException("title can not be null or empty");
 
         Title = title.Trim();
     }
@@ -87,7 +88,7 @@ public class Programme : FullAuditedEntity<int>
     private void SetPerPersonVotingCount(int count)
     {
         if (count < 1)
-            throw new ArgumentException("PerPersonVotingCount can't less than zero");
+            throw new TWException("PerPersonVotingCount can't less than zero");
 
         PersonalMaxVotingCount = count;
     }
@@ -100,7 +101,7 @@ public class Programme : FullAuditedEntity<int>
         // check duplicatedCodeNumber
         var duplicatedCodeNumber = items.GroupBy(x => x.Code).Where(x => x.Count() > 1).FirstOrDefault()?.Key;
         if (duplicatedCodeNumber is not null)
-            throw new ArgumentException($"duplicate item code:{duplicatedCodeNumber}");
+            throw new TWException($"duplicate item code:{duplicatedCodeNumber}");
 
         foreach (var item in items)
         {
@@ -120,7 +121,7 @@ public class Programme : FullAuditedEntity<int>
         // check duplicatedCodeNumber
         var duplicatedCodeNumber = items.GroupBy(x => x.Code).Where(x => x.Count() > 1).FirstOrDefault()?.Key;
         if (duplicatedCodeNumber is not null)
-            throw new ArgumentException($"duplicate item code:{duplicatedCodeNumber}");
+            throw new TWException($"duplicate item code:{duplicatedCodeNumber}");
         
         // removing
         _programmeItems.RemoveAll(x => !items.Any(y => x.Id.Equals(y.Id)));

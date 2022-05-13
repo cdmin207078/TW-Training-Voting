@@ -1,4 +1,5 @@
 using TW.Infrastructure.Core.Components;
+using TW.Infrastructure.Core.Exceptions;
 using TW.Infrastructure.Core.Primitives;
 
 namespace TW.Training.Vote.Domain.Programmes;
@@ -23,11 +24,11 @@ public class ProgrammeService: IProgrammeService
     public async Task Update(UpdateProgrammeInput input)
     {
         if (input == null) 
-            throw new ArgumentNullException(nameof(input));
+            throw new TWException(nameof(input));
 
         var programme = await _programmeRepository.Get(input.Id);
         if (programme is null)
-            throw new ArgumentNullException($"programme: {input.Id} not exist");
+            throw new TWException($"programme: {input.Id} not exist");
 
         await programme.Update(input, _programmeRepository);
         await _programmeRepository.Update(programme);
@@ -36,11 +37,11 @@ public class ProgrammeService: IProgrammeService
     public async Task Delete(DeleteProgrammeInput input)
     {
         if (input?.Id is null)
-            throw new ArgumentNullException(nameof(input));
+            throw new TWException(nameof(input));
 
         var exists = await _programmeRepository.IsExists(input.Id);
         if(!exists)
-            throw new ArgumentNullException($"programme: {input.Id} not exist");
+            throw new TWException($"programme: {input.Id} not exist");
 
         await _programmeRepository.Delete(input);
     }

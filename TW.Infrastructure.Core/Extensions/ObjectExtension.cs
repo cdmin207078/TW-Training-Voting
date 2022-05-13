@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TW.Infrastructure.Core.Exceptions;
 
 namespace System
 {
@@ -16,7 +17,7 @@ namespace System
         public static void IsNullThrowException<TSource>(this TSource source) where TSource : class
         {
             if (source.IsNull())
-                throw new ArgumentNullException(nameof(source));
+                throw new TWException(nameof(source));
         }
 
         public static bool IsNotNull<TSource>(this TSource source) where TSource : class

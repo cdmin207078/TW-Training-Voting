@@ -1,7 +1,6 @@
-using System.Net;
 using Microsoft.Extensions.Options;
 using RestSharp;
-using RestSharp.Authenticators;
+using TW.Infrastructure.Core.Exceptions;
 using TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Request;
 using TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Response;
 using TW.SpringFestivalGALA2023.Web.Models.Configures;
@@ -38,7 +37,7 @@ public class VotingApiProxy : IVotingApiProxy
 
         var response = await _client.ExecuteGetAsync<VotingApiResponse>(request);
         if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new ArgumentException(response.Data.message);
+            throw new TWException(response.Data.message);
     }
 
     public async Task<GetProgrammeResponse> GetProgramme(string programmeCode)
@@ -46,7 +45,7 @@ public class VotingApiProxy : IVotingApiProxy
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme"));
         var response = await _client.ExecuteGetAsync<VotingApiResponse<GetProgrammeResponse>>(request);
         if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new ArgumentException(response.Data.message);
+            throw new TWException(response.Data.message);
 
         return response?.Data?.data;
     }
@@ -56,7 +55,7 @@ public class VotingApiProxy : IVotingApiProxy
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme-statistic"));
         var response = await _client.ExecuteGetAsync<VotingApiResponse<GetProgrammeStatisticResponse>>(request);
         if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new ArgumentException(response.Data.message);
+            throw new TWException(response.Data.message);
 
         return response?.Data?.data;
     }
@@ -66,7 +65,7 @@ public class VotingApiProxy : IVotingApiProxy
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme-fortune"));
         var response = await _client.ExecuteGetAsync<VotingApiResponse<GetProgrammeFortuneResponse>>(request);
         if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new ArgumentException(response.Data.message);
+            throw new TWException(response.Data.message);
 
         return response?.Data?.data;
     }

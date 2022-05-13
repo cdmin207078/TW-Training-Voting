@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using TW.Infrastructure.Core.Exceptions;
 
 namespace System.Linq
 {
@@ -16,7 +17,7 @@ namespace System.Linq
         public static IQueryable<TSource> WhereIf<TSource>(this IQueryable<TSource> source, bool condition, Expression<Func<TSource, bool>> predicate)
         {
             if (predicate is null)
-                throw new ArgumentNullException(nameof(predicate));
+                throw new TWException(nameof(predicate));
 
             if (condition)
                 source = source.Where(predicate);

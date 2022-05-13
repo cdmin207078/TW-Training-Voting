@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TW.Infrastructure.Core.Exceptions;
 
 namespace TW.Infrastructure.Domain.Pagination
 {
@@ -11,9 +12,9 @@ namespace TW.Infrastructure.Domain.Pagination
         protected PaginationRequest(int pageSize, int currentPage)
         {
             if (pageSize < 1)
-                throw new ArgumentException("pageSize is error value");
+                throw new TWException("pageSize is error value");
             if (currentPage < 1)
-                throw new ArgumentException("currentPage is error value");
+                throw new TWException("currentPage is error value");
 
             PageSize = pageSize;
             CurrentPage = currentPage;

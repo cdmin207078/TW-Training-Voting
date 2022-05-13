@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using TW.Infrastructure.Core.Exceptions;
 
 namespace TW.Infrastructure.Core.Primitives;
 
@@ -17,12 +18,12 @@ public class CodeNumber : AbstractPrimitiveObject<string>
     protected override string TryGetValue(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            throw new ArgumentException("CodeNumber cannot be null or empty.");
+            throw new TWException("CodeNumber cannot be null or empty.");
 
         value = value.Trim();
 
         if (!Regex.IsMatch(value, REGEX_CODENUMBER_SCHEME))
-            throw new ArgumentException($"CodeNumber is illegal. can't set {value}");
+            throw new TWException($"CodeNumber is illegal. can't set {value}");
 
         return value;
     }

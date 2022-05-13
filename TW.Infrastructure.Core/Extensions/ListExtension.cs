@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using TW.Infrastructure.Core.Exceptions;
 
 namespace System.Linq
 {
@@ -67,7 +68,7 @@ namespace System.Linq
         public static void IsNullOrEmptyThrowException<TSource>(this List<TSource> source)
         {
             if (source.IsNullOrEmpty())
-                throw new ArgumentNullException(nameof(source));
+                throw new TWException(nameof(source));
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace System.Linq
         public static void IsNullOrEmptyThrowException<TSource>(this List<TSource> source, Func<TSource, bool> predicate)
         {
             if (source.IsNullOrEmpty(predicate))
-                throw new ArgumentNullException(nameof(source));
+                throw new TWException(nameof(source));
         }
 
         /// <summary>
@@ -90,7 +91,7 @@ namespace System.Linq
         public static List<TSource> Confuse<TSource>(this List<TSource> source)
         {
             if (source is null)
-                throw new ArgumentNullException(nameof(source));
+                throw new TWException(nameof(source));
 
             if (source.Any())
             {
