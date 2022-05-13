@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TW.Infrastructure.ApsNetCore.Controllers;
 using TW.Infrastructure.Core.Components;
 using TW.Infrastructure.Core.Primitives;
 using TW.Infrastructure.Domain.Models;
@@ -8,9 +9,8 @@ using TW.Training.Vote.WebApi.Models.Programmes;
 
 namespace TW.Training.Vote.WebApi.Controllers;
 
-[ApiController]
 [Route("api/programmes")]
-public class ProgrammeController : ControllerBase
+public class ProgrammeController : ApiBaseController
 {
     private readonly IObjectMapperComponent _mapper;
     private readonly ILogger<ProgrammeController> _logger;
@@ -48,8 +48,8 @@ public class ProgrammeController : ControllerBase
         input.CreatorId = _webWorkContext.User?.Id ?? new Id<int>(1);
        
         await _programmeService.Create(input);
-        
-        return Ok("create success");
+
+        return Success("create success");
     }
 
     [HttpDelete("{id}")]
@@ -62,7 +62,7 @@ public class ProgrammeController : ControllerBase
         
         await _programmeService.Delete(input);
         
-        return Ok("delete success");
+        return Success("delete success");
     }
     
     [HttpPut("{id}")]
@@ -74,7 +74,7 @@ public class ProgrammeController : ControllerBase
         
         await _programmeService.Update(input);
         
-        return Ok("update success");
+        return Success("update success");
     }
     
     [HttpGet]
@@ -90,22 +90,21 @@ public class ProgrammeController : ControllerBase
         
         var input = new GetProgrammesInput(codeNumber, creationTimeSpan, pageSize, currentPage);
         var result = await _programmeService.GetProgrammes(input);
-        
-        return Ok(result);
+
+        return Success(data: result);
     }
     
     [HttpGet("d-{id}")]
     public async Task<IActionResult> Get([FromRoute] int id)
     {
         var result = await _programmeService.GetProgramme(new Id<int>(id));
-        return Ok(result);
+        return Success(data: result);
     }
     
     [HttpGet("c-{programmeCode}")]
     public async Task<IActionResult> Get([FromRoute] string programmeCode)
     {
-        _logger.LogInformation($"Get: {programmeCode}");
         var result = await _programmeService.GetProgramme(new CodeNumber(programmeCode));
-        return Ok(result);
+        return Success(data: result);
     }
 }

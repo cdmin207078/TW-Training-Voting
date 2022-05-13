@@ -1,5 +1,5 @@
-using TW.SpringFestivalGALA2023.Web.Models.Contracts.Request;
-using TW.SpringFestivalGALA2023.Web.Models.Contracts.Response;
+using TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Request;
+using TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Response;
 
 namespace TW.SpringFestivalGALA2023.Web.Services.VotingApi;
 

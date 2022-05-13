@@ -1,4 +1,4 @@
-namespace TW.SpringFestivalGALA2023.Web.Models.Contracts.Request;
+namespace TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Request;
 
 public class SubmitVotingRequest
 {

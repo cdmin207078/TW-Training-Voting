@@ -1,13 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using TW.Infrastructure.ApsNetCore.Controllers;
 using TW.Infrastructure.Core.Primitives;
 using TW.Training.Vote.Domain.Votings;
 using TW.Training.Vote.WebApi.Models.Votings;
 
 namespace TW.Training.Vote.WebApi.Controllers;
 
-[ApiController]
 [Route("api/voting")]
-public class VotingController : ControllerBase
+public class VotingController : ApiBaseController
 {
     private readonly IVotingService _votingService;
     private readonly IStatisticService _statisticService;
@@ -31,7 +31,7 @@ public class VotingController : ControllerBase
 
         await _votingService.Voting(input);
 
-        return Ok("voting success");
+        return Success("voting success");
     }
 
     [HttpGet("{programmeCode}/statistic")]
@@ -40,7 +40,7 @@ public class VotingController : ControllerBase
         var input = new GetVotingStatisticInput(new CodeNumber(programmeCode));
         var result = await _statisticService.GetVotingStatistic(input);
         
-        return Ok(result);
+        return Success(data: result);
     }
 
     [HttpGet("{programmeCode}/fortune")]
@@ -49,6 +49,6 @@ public class VotingController : ControllerBase
         var input = new GetVotingFortuneInput(new CodeNumber(programmeCode));
         var result = await _statisticService.GenerateVotingFortune(input);
         
-        return Ok(result);
+        return Success(data: result);
     }
 }
