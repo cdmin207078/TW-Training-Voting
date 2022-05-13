@@ -100,16 +100,6 @@ public class Startup
             
             config.CreateMap<UpdateProgrammeRequest, UpdateProgrammeInput>();
             config.CreateMap<UpdateProgrammeRequest.Item, UpdateProgrammeInput.Item>();
-            
-            
-            // config.CreateMap<AccessibleType, int>()
-            //     .ConstructUsing(source => source.Value)
-            //     .ReverseMap()
-            //     .ConstructUsing(source => new AccessibleType(source));
-            //
-            // config.CreateMap<Writing, GetWritingOutput>()
-            //     .ForMember(dest => dest.Categories, opts => opts.MapFrom(src => src.Categories.Select(d => d.Id.Value).ToList()))
-            //     .ForMember(dest => dest.Tags, opts => opts.MapFrom(src => src.Tags.Select(d => d.Id.Value).ToList()));
         });
     }
 

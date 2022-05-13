@@ -13,14 +13,16 @@ namespace TW.Training.Vote.WebApi.Controllers;
 public class ProgrammeController : ControllerBase
 {
     private readonly IObjectMapperComponent _mapper;
+    private readonly ILogger<ProgrammeController> _logger;
     private readonly IProgrammeService _programmeService;
     private readonly WebWorkContext _webWorkContext;
 
-    public ProgrammeController(IProgrammeService programmeService,IObjectMapperComponent mapper, WebWorkContext webWorkContext)
+    public ProgrammeController(ILogger<ProgrammeController> logger, IProgrammeService programmeService,IObjectMapperComponent mapper, WebWorkContext webWorkContext)
     {
-        _programmeService = programmeService;
         _mapper = mapper;
+        _logger = logger;
         _webWorkContext = webWorkContext;
+        _programmeService = programmeService;
     }
 
     [HttpPost]
@@ -102,6 +104,7 @@ public class ProgrammeController : ControllerBase
     [HttpGet("c-{programmeCode}")]
     public async Task<IActionResult> Get([FromRoute] string programmeCode)
     {
+        _logger.LogInformation($"Get: {programmeCode}");
         var result = await _programmeService.GetProgramme(new CodeNumber(programmeCode));
         return Ok(result);
     }

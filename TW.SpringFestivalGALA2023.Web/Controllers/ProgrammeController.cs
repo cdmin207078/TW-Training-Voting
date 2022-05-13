@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using TW.SpringFestivalGALA2023.Web.Models.Configures;
 using TW.SpringFestivalGALA2023.Web.Services;
 
 namespace TW.SpringFestivalGALA2023.Web.Controllers;
@@ -7,16 +9,19 @@ namespace TW.SpringFestivalGALA2023.Web.Controllers;
 [Route("api/programme")]
 public class ProgrammeController : ControllerBase
 {
+    private readonly string _programmeCode;
     private readonly IProgrammeService _programmeService;
 
-    public ProgrammeController(IProgrammeService programmeService)
+    
+    public ProgrammeController(IOptions<VotingApiConfiguration> votingApiConfigurationOptions, IProgrammeService programmeService)
     {
+        _programmeCode = votingApiConfigurationOptions.Value.ProgrammeCode;
         _programmeService = programmeService;
     }
     
-    [HttpGet("{programmeCode}")]
-    public async Task<IActionResult> GetProgramme([FromRoute] string programmeCode)
+    public async Task<IActionResult> GetProgramme()
     {
-        return Ok();
+        var response = await _programmeService.GetProgramme(_programmeCode);
+        return Ok(response);
     }
 }

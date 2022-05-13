@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using TW.SpringFestivalGALA2023.Web.Models.Configures;
 using TW.SpringFestivalGALA2023.Web.Models.Contracts;
+using TW.SpringFestivalGALA2023.Web.Models.Contracts.Request;
 using TW.SpringFestivalGALA2023.Web.Services;
 
 namespace TW.SpringFestivalGALA2023.Web.Controllers;
@@ -8,59 +11,33 @@ namespace TW.SpringFestivalGALA2023.Web.Controllers;
 [Route("api/voting")]
 public class VotingController : ControllerBase
 {
+    private readonly string _programmeCode;
     private readonly IVotingService _votingService;
 
-    public VotingController(IVotingService votingService)
+    public VotingController(IOptions<VotingApiConfiguration> votingApiConfigurationOptions, IVotingService votingService)
     {
+        _programmeCode = votingApiConfigurationOptions.Value.ProgrammeCode;
         _votingService = votingService;
     }
     
-    [HttpPost("{programmeCode}")]
-    public async Task<IActionResult> SubmitVoting([FromRoute] string programmeCode, SubmitVotingRequest request)
-    {
-        // var input = new SubmitVotingInput
-        // {
-        //     Name = request.UserName,
-        //     MobilePhoneNumber = new MobilePhoneNumber(request.UserMobilePhoneNumber),
-        //     ProgrammeCodeNumber = new CodeNumber(programmeCode),
-        //     ProgrammeItemCodeNumbers = request.VotingCodeNumbers.Select(x => new CodeNumber(x)).ToList()
-        // };
-        //
-        // await _votingService.Voting(input);
-
-        return Ok("voting success");
+    [HttpPost]
+    public async Task<IActionResult> SubmitVoting(SubmitVotingRequest request)
+    { 
+        await _votingService.SubmitVoting(_programmeCode, request);
+        return Ok();
     }
     
-    [HttpPost("{programmeCode}/statistic")]
-    public async Task<IActionResult> GetVotingStatistic([FromRoute] string programmeCode)
+    [HttpGet("statistic")]
+    public async Task<IActionResult> GetVotingStatistic()
     {
-        // var input = new SubmitVotingInput
-        // {
-        //     Name = request.UserName,
-        //     MobilePhoneNumber = new MobilePhoneNumber(request.UserMobilePhoneNumber),
-        //     ProgrammeCodeNumber = new CodeNumber(programmeCode),
-        //     ProgrammeItemCodeNumbers = request.VotingCodeNumbers.Select(x => new CodeNumber(x)).ToList()
-        // };
-        //
-        // await _votingService.Voting(input);
-
-        return Ok("statistic");
+        var response = await _votingService.GetProgrammeStatistic(_programmeCode);
+        return Ok(response);
     }
     
-    
-    [HttpPost("{programmeCode}/fortune")]
-    public async Task<IActionResult> GetVotingFortune([FromRoute] string programmeCode)
+    [HttpGet("fortune")]
+    public async Task<IActionResult> GetVotingFortune()
     {
-        // var input = new SubmitVotingInput
-        // {
-        //     Name = request.UserName,
-        //     MobilePhoneNumber = new MobilePhoneNumber(request.UserMobilePhoneNumber),
-        //     ProgrammeCodeNumber = new CodeNumber(programmeCode),
-        //     ProgrammeItemCodeNumbers = request.VotingCodeNumbers.Select(x => new CodeNumber(x)).ToList()
-        // };
-        //
-        // await _votingService.Voting(input);
-
-        return Ok("fortune");
+        var response = await _votingService.GetProgrammeFortune(_programmeCode);
+        return Ok(response);
     }
 }
