@@ -1,12 +1,5 @@
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using System.Linq;
 using TW.Infrastructure.ApsNetCore.Middlewares;
 using TW.Infrastructure.Core.Components;
 using TW.Infrastructure.Domain.WebWorkContext;

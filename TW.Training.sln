@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A6674FF4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TW.Infrastructure.ApsNetCore", "TW.Infrastructure.ApsNetCore\TW.Infrastructure.ApsNetCore.csproj", "{824F4A29-9869-46E8-836E-9A6191E16EC0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TW.SpringFestivalGALA2023.Web", "TW.SpringFestivalGALA2023.Web\TW.SpringFestivalGALA2023.Web.csproj", "{B7431186-0C55-4879-A963-334D80D4989C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{824F4A29-9869-46E8-836E-9A6191E16EC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{824F4A29-9869-46E8-836E-9A6191E16EC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{824F4A29-9869-46E8-836E-9A6191E16EC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7431186-0C55-4879-A963-334D80D4989C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7431186-0C55-4879-A963-334D80D4989C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7431186-0C55-4879-A963-334D80D4989C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7431186-0C55-4879-A963-334D80D4989C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -92,5 +98,6 @@ Global
 		{A6674FF4-55B5-40A2-BC07-9AF9E4F58AA5} = {C859BA1E-AF4F-4B03-83C7-3D92A176D123}
 		{44111165-99FC-40D5-8ACF-1CDE3E75F483} = {A6674FF4-55B5-40A2-BC07-9AF9E4F58AA5}
 		{824F4A29-9869-46E8-836E-9A6191E16EC0} = {C859BA1E-AF4F-4B03-83C7-3D92A176D123}
+		{B7431186-0C55-4879-A963-334D80D4989C} = {E317CDC0-DD5F-44D0-A6A1-7DBF0F0BD5EA}
 	EndGlobalSection
 EndGlobal
