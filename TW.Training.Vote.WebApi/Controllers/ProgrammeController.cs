@@ -28,22 +28,6 @@ public class ProgrammeController : ApiBaseController
     [HttpPost]
     public async Task<IActionResult> Create(CreateProgrammeRequest request)
     {
-        // var input = new CreateProgrammeInput
-        // {
-        //     Code = new CodeNumber(request.Code),
-        //     Title = request.Title,
-        //     Description = request.Description,
-        //     PerPersonMaxVotingCount = request.PerPersonMaxVotingCount,
-        //     CreatorId = _webWorkContext.User?.Id ?? new Id<int>(1),
-        //     Items = request.Items?.Select(x => new CreateProgrammeInput.Item
-        //     {
-        //         Code = new CodeNumber(x.Code),
-        //         Title = x.Title,
-        //         Description = x.Description,
-        //         Order = x.Order
-        //     }).ToList()
-        // };
-        
         var input = _mapper.Map<CreateProgrammeInput>(request);
         input.CreatorId = _webWorkContext.User?.Id ?? new Id<int>(1);
        

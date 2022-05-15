@@ -12,9 +12,33 @@ public class AutoMapperObjectComponent : IObjectMapperComponent
         _mapper = mapper;
     }
 
-    public TDestination Map<TDestination>(object source) => _mapper.Map<TDestination>(source);
+    public TDestination Map<TDestination>(object source) => Execute<object, TDestination>(source);
 
-    public TDestination Map<TSource, TDestination>(TSource source) => _mapper.Map<TSource, TDestination>(source);
+    public TDestination Map<TSource, TDestination>(TSource source) => Execute<TSource, TDestination>(source);
 
-    public TDestination Map<TSource, TDestination>(TSource source, TDestination destination) => _mapper.Map<TSource, TDestination>(source, destination);
+    public TDestination Map<TSource, TDestination>(TSource source, TDestination destination) => Execute(source, destination);
+
+    public TDestination Execute<TSource, TDestination>(TSource source)
+    {
+        try
+        {
+            return _mapper.Map<TSource, TDestination>(source);
+        }
+        catch (AutoMapperMappingException ex)
+        {
+            throw ex.InnerException;
+        }
+    }
+    
+    public TDestination Execute<TSource, TDestination>(TSource source, TDestination destination)
+    {
+        try
+        {
+            return _mapper.Map<TSource, TDestination>(source, destination);
+        }
+        catch (AutoMapperMappingException ex)
+        {
+            throw ex.InnerException;
+        }
+    }
 }

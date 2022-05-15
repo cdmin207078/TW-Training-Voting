@@ -31,8 +31,6 @@ public class GlobalExceptionCatcherMiddleware
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, ex.Message);
-
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             var error = new { code = StatusCodes.Status500InternalServerError, message = "Internal Server Error" };
