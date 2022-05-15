@@ -35,38 +35,43 @@ public class VotingApiProxy : IVotingApiProxy
         var request = new RestRequest(GetRequestPath(programmeCode, "submit-voting"));
         request.AddJsonBody(submitVoting);
 
-        var response = await _client.ExecuteGetAsync<VotingApiResponse>(request);
-        if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new TWException(response.Data.message);
+        var response = await _client.PostAsync<VotingApiResponse>(request);
+        
+        _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(response));
+        
+        if (response?.code ==(int)VotingApiResponseCode.Failure)
+            throw new TWException(response.message);
     }
 
     public async Task<GetProgrammeResponse> GetProgramme(string programmeCode)
     {
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme"));
-        var response = await _client.ExecuteGetAsync<VotingApiResponse<GetProgrammeResponse>>(request);
-        if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new TWException(response.Data.message);
+        var response = await _client.GetAsync<VotingApiResponse<GetProgrammeResponse>>(request);
+        
+        _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(response));
+        if (response.code ==(int)VotingApiResponseCode.Failure)
+            throw new TWException(response.message);
 
-        return response?.Data?.data;
+        return response.data;
     }
     
     public async Task<GetProgrammeStatisticResponse> GetProgrammeStatistic(string programmeCode)
     {
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme-statistic"));
-        var response = await _client.ExecuteGetAsync<VotingApiResponse<GetProgrammeStatisticResponse>>(request);
-        if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new TWException(response.Data.message);
+        var response = await _client.GetAsync<VotingApiResponse<GetProgrammeStatisticResponse>>(request);
+        if (response?.code ==(int)VotingApiResponseCode.Failure)
+            throw new TWException(response.message);
 
-        return response?.Data?.data;
+        return response?.data;
     }
 
     public async Task<GetProgrammeFortuneResponse> GetProgrammeVotingFortune(string programmeCode)
     {
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme-fortune"));
-        var response = await _client.ExecuteGetAsync<VotingApiResponse<GetProgrammeFortuneResponse>>(request);
-        if (response?.Data?.code ==(int)VotingApiResponseCode.Failure)
-            throw new TWException(response.Data.message);
+        var response = await _client.GetAsync<VotingApiResponse<GetProgrammeFortuneResponse>>(request);
+        if (response?.code ==(int)VotingApiResponseCode.Failure)
+            throw new TWException(response.message);
 
-        return response?.Data?.data;
+        return response?.data;
     }
 }

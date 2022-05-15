@@ -1,9 +1,9 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace TW.Infrastructure.ApsNetCore.Middlewares;
 
@@ -45,7 +45,7 @@ public class RequestResponseRecorderMiddleware
             response = responseContent
         };
 
-        logger.LogInformation(JsonConvert.SerializeObject(message));
+        logger.LogInformation(JsonSerializer.Serialize(message));
     }
 
     private string GetUrl(HttpRequest request) =>

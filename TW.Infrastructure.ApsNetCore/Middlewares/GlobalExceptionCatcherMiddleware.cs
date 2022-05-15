@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using TW.Infrastructure.ApsNetCore.Contracts;
 using TW.Infrastructure.Core.Exceptions;
 
@@ -27,14 +27,14 @@ public class GlobalExceptionCatcherMiddleware
             context.Response.StatusCode = StatusCodes.Status200OK;
             var error = new { code = GenernalApiResponseCode.Failure, message = tex?.Message };
             
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(error));
+            await context.Response.WriteAsync(JsonSerializer.Serialize(error));
         }
         catch (Exception ex)
         {
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             var error = new { code = StatusCodes.Status500InternalServerError, message = "Internal Server Error" };
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(error));
+            await context.Response.WriteAsync(JsonSerializer.Serialize(error));
         }
     }
 }
