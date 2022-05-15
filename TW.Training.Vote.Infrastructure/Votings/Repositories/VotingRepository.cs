@@ -23,19 +23,21 @@ public class VotingRepository : IVotingRepository
 
     public Task Voting(Voting voting)
     {
-        foreach (var item in voting.VoteItems)
+        var programmeItmes = voting.VoteItems
+            .Select(x => new Programmes.PO.ProgrammeItem { Id = x.Id.Value })
+            .Distinct().ToList();
+
+        var votes = voting.VoteItems.Select(x => new PO.Voting
         {
-            var vote = new PO.Voting
-            {
-                CreatorId = item.CreatorId.Value,
-                CreationTime = item.CreationTime,
-                Name = voting.Name,
-                MobilePhoneNumber = voting.MobilePhoneNumber.Value,
-                ProgrammeItem = new Programmes.PO.ProgrammeItem{ Id = item.Id.Value }
-            };
-            
-            _ctx.Attach(vote);
-        }
+            CreatorId = x.CreatorId.Value,
+            CreationTime = x.CreationTime,
+            Name = voting.Name,
+            MobilePhoneNumber = voting.MobilePhoneNumber.Value,
+            ProgrammeItem = programmeItmes.FirstOrDefault(d => d.Id == x.Id.Value)
+        });
+        
+        _ctx.Votings.AttachRange(votes);
+        Console.WriteLine(_ctx.ChangeTracker.DebugView.LongView);
 
         return _ctx.SaveChangesAsync();
     }

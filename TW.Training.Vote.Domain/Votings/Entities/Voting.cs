@@ -57,26 +57,37 @@ public class Voting
 
         Programme = programme;
     }
-    
+
     private async Task SetProgrammeItems(List<CodeNumber> programmeItems, IVotingRepository votingRepository)
     {
         if (programmeItems is null || !programmeItems.Any())
             throw new TWException($"voting can not be null or empty");
-        
+
         // validate voting count
         var existVotingCount = await votingRepository.GetVotingCount(MobilePhoneNumber, Programme.Code);
         var remainVotingCount = Programme.PersonalMaxVotingCount - existVotingCount;
         if (remainVotingCount == 0)
-            throw new TWException($"Dear: {MobilePhoneNumber}, you are already complete voting for {Programme.Title}. can not repeat voting");
+            throw new TWException(
+                $"Dear: {MobilePhoneNumber}, you are already complete voting for {Programme.Title}. can not repeat voting");
         if (remainVotingCount < programmeItems.Count)
-            throw new TWException($"Dear: {MobilePhoneNumber} remaining have {remainVotingCount} left to voting. please check your voting items count");
+            throw new TWException(
+                $"Dear: {MobilePhoneNumber} remaining have {remainVotingCount} left to voting. please check your voting items count");
 
+        // validate vote exists
         var expects = programmeItems.Except(Programme.ProgrammeItems.Select(x => x.Code).ToList());
-        if (expects.Any())
+        if (expects.Any()) 
             throw new TWException($"unknown programme item: {string.Join(',', expects)}");
-
-        VoteItems = Programme.ProgrammeItems.Where(x => programmeItems.Any(c => c.Equals(x.Code))).ToList();
+        
+        // set votes
+        var voteItems = new List<ProgrammeItem>();
+        foreach (var item in programmeItems)
+        {
+            var vote = Programme.ProgrammeItems.FirstOrDefault(x => x.Code == item);
+            if (vote is not null)
+                voteItems.Add(vote);
+        }
+        VoteItems = voteItems;
     }
-    
+
     #endregion
 }

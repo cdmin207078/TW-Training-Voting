@@ -13,9 +13,6 @@ public class VoteDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder.Entity<ProgrammeItem>().ToTable("programme_items").HasKey(x => x.Id);
-        builder.Entity<Voting>().ToTable("votings").HasKey(x => x.Id);
-        
         builder.ApplyConfigurationsFromAssembly(typeof(VoteDbContext).Assembly);
     }
 
@@ -32,6 +29,25 @@ public class ProgrammeEntityTypeConfiguration : IEntityTypeConfiguration<Program
     {
         builder.ToTable("programmes").HasKey(x => x.Id);
         builder.HasMany(x => x.ProgrammeItems);
+    }
+}
+
+public class ProgrammeItemEntityTypeConfiguration : IEntityTypeConfiguration<ProgrammeItem>
+{
+    public void Configure(EntityTypeBuilder<ProgrammeItem> builder)
+    {
+        builder.ToTable("programme_items").HasKey(x => x.Id);
+        builder.HasOne(x => x.Programme);
+        builder.HasMany(x => x.Votings).WithOne(x => x.ProgrammeItem);
+    }
+}
+
+public class VotingEntityTypeConfiguration : IEntityTypeConfiguration<Voting>
+{
+    public void Configure(EntityTypeBuilder<Voting> builder)
+    {
+        builder.ToTable("votings").HasKey(x => x.Id);
+        builder.HasOne(x => x.ProgrammeItem).WithMany(x => x.Votings);
     }
 }
 
