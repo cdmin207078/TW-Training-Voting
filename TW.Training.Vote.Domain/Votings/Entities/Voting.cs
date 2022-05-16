@@ -41,7 +41,7 @@ public class Voting
     private void SetMobilePhoneNumber(MobilePhoneNumber mobilePhoneNumber)
     {
         if (mobilePhoneNumber is null) 
-            throw new TWException(nameof(mobilePhoneNumber));
+            throw new TWException("the user mobile-phone-number cannot be null");
         
         MobilePhoneNumber = mobilePhoneNumber;
     }
@@ -49,7 +49,7 @@ public class Voting
     private async Task SetProgramme(CodeNumber codeNumber,IProgrammeRepository programmeRepository)
     {
         if (codeNumber is null)
-            throw new TWException(nameof(codeNumber));
+            throw new TWException("the programme Number cannot be null");
 
         var programme = await programmeRepository.Get(codeNumber);
         if (programme is null)
@@ -66,7 +66,7 @@ public class Voting
         // validate voting count
         var existVotingCount = await votingRepository.GetVotingCount(MobilePhoneNumber, Programme.Code);
         var remainVotingCount = Programme.PersonalMaxVotingCount - existVotingCount;
-        if (remainVotingCount == 0)
+        if (remainVotingCount < 1)
             throw new TWException(
                 $"Dear: {MobilePhoneNumber}, you are already complete voting for {Programme.Title}. can not repeat voting");
         if (remainVotingCount < programmeItems.Count)
