@@ -1,5 +1,8 @@
+using System.Text.Json;
 using Microsoft.Extensions.Options;
 using RestSharp;
+using TW.Infrastructure.Core.Components;
+using TW.Infrastructure.Core.Components.TransientFalutProcess;
 using TW.Infrastructure.Core.Exceptions;
 using TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Request;
 using TW.SpringFestivalGALA2023.Web.Infrastructures.VotingApi.Constracts.Response;
@@ -11,12 +14,16 @@ namespace TW.SpringFestivalGALA2023.Web.Services.VotingApi;
 public class VotingApiProxy : IVotingApiProxy
 {
     private readonly ILogger<VotingApiProxy> _logger;
+    private readonly IRetryProcessor _retryProcessor;
     private readonly RestClient _client;
     private readonly VotingApiConfiguration _votingApiConfiguration;
 
-    public VotingApiProxy(ILogger<VotingApiProxy> logger, IOptions<VotingApiConfiguration> votingApiConfigureOption)
+    public VotingApiProxy(ILogger<VotingApiProxy> logger,
+        IOptions<VotingApiConfiguration> votingApiConfigureOption,
+        IRetryProcessor retryProcessor)
     {
         _logger = logger;
+        _retryProcessor = retryProcessor;
         _votingApiConfiguration = votingApiConfigureOption.Value;
         _client = new RestClient(_votingApiConfiguration.BaseURL);
     }
@@ -36,22 +43,34 @@ public class VotingApiProxy : IVotingApiProxy
         request.AddJsonBody(submitVoting);
 
         var response = await _client.PostAsync<VotingApiResponse>(request);
-        
-        _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(response));
-        
         if (response?.code ==(int)VotingApiResponseCode.Failure)
             throw new TWException(response.message);
     }
 
-    public async Task<GetProgrammeResponse> GetProgramme(string programmeCode)
+    private async Task<VotingApiResponse<GetProgrammeResponse>> _GetProgramme(string programmeCode)
     {
         var request = new RestRequest(GetRequestPath(programmeCode, "get-programme"));
         var response = await _client.GetAsync<VotingApiResponse<GetProgrammeResponse>>(request);
-        
-        _logger.LogInformation(System.Text.Json.JsonSerializer.Serialize(response));
-        if (response.code ==(int)VotingApiResponseCode.Failure)
+        if (response?.code ==(int)VotingApiResponseCode.Failure)
             throw new TWException(response.message);
+        
+        return response;
+    }
 
+    public async Task<GetProgrammeResponse> GetProgramme(string programmeCode)
+    {
+        // var xx = await _faultProcessor
+        //     .RetryForResult(
+        //         SomeTask("name"),
+        //         // () => Task.FromResult("asdasd"),
+        //         // response => response.,
+        //         response => true,
+        //         3, "Getxxx"
+        //     );
+        // var result = await _faultProcessor.Execute(_GetProgramme(programmeCode), x => x.code == (int)VotingApiResponseCode.Failure);
+        //
+        
+        var response = await _retryProcessor.Execute(_GetProgramme(programmeCode), x => x?.code == (int)VotingApiResponseCode.Failure);
         return response.data;
     }
     
@@ -61,7 +80,7 @@ public class VotingApiProxy : IVotingApiProxy
         var response = await _client.GetAsync<VotingApiResponse<GetProgrammeStatisticResponse>>(request);
         if (response?.code ==(int)VotingApiResponseCode.Failure)
             throw new TWException(response.message);
-
+        
         return response?.data;
     }
 
