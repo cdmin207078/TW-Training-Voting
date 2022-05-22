@@ -22,7 +22,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     //     SetCreation(input.CreatorId);
     //     SetOrder(input.Order);
     //     SetTitle(input.Title);
-    //     SetCode(input.Code, programmeRepository).GetAwaiter().GetResult();
+    //     SetCode(input.code, programmeRepository).GetAwaiter().GetResult();
     //     
     //     Description = input.Description.Trim();
     // }
@@ -66,7 +66,7 @@ public class ProgrammeItem: FullAuditedEntity<int>
     //     SetLastModified(input.LastModifierId);
     //     SetTitle(input.Title);
     //     SetOrder(input.Order);
-    //     await SetCode(input.Code, programmeRepository);
+    //     await SetCode(input.code, programmeRepository);
     //     
     //     Description = input.Description.Trim();
     // }

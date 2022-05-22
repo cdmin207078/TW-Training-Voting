@@ -8,6 +8,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\TW.Infrastructure.ApsNetCore\TW.Infrastructure.ApsNetCore.csproj" />
+      <ProjectReference Include="..\TW.Infrastructure.RestsharpHttpClient\TW.Infrastructure.RestsharpHttpClient.csproj" />
+      <ProjectReference Include="..\TW.Infrastructure.TransientFaultProcess\TW.Infrastructure.TransientFaultProcess.csproj" />
     </ItemGroup>
 
     <ItemGroup>

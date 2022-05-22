@@ -2,6 +2,10 @@
 using System.Net;
 using Microsoft.OpenApi.Models;
 using TW.Infrastructure.ApsNetCore.Middlewares;
+using TW.Infrastructure.Core.Components.HttpClients;
+using TW.Infrastructure.Core.Components.TransientFalutProcess;
+using TW.Infrastructure.RestsharpHttpClient;
+using TW.Infrastructure.TransientFaultProcess;
 using TW.SpringFestivalGALA2023.Web.Models.Configures;
 using TW.SpringFestivalGALA2023.Web.Services;
 using TW.SpringFestivalGALA2023.Web.Services.VotingApi;
@@ -60,6 +64,9 @@ public class Startup
     private void ConfigureDependencyService(IServiceCollection services)
     {
         services.Configure<VotingApiConfiguration>(Configuration.GetSection("VotingAPI"));
+
+        services.AddSingleton<IRetryProcessor, RetryProcessor>();
+        services.AddSingleton<IHttpClientService, RestsharpHttpClientService>();
         
         services.AddScoped<IProgrammeService, ProgrammeService>();
         services.AddScoped<IVotingService, VotingService>();

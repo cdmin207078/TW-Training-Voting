@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using TW.Infrastructure.ApsNetCore.Contracts;
 using TW.Infrastructure.Core.Exceptions;
+using TW.Infrastructure.Core.Models.HttpAPI;
 
 namespace TW.Infrastructure.ApsNetCore.Middlewares;
 
@@ -21,19 +21,24 @@ public class GlobalExceptionCatcherMiddleware
         {
             await _next(context);
         }
-        catch (TWException tex)
+        catch (TWException ex)
         {
+            logger.LogWarning(ex?.Message);
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status200OK;
-            var error = new { code = GenernalApiResponseCode.Failure, message = tex?.Message };
+            var error = new { code = HttpApiResponseCode.Failure, message = ex?.Message };
             
             await context.Response.WriteAsync(JsonSerializer.Serialize(error));
         }
         catch (Exception ex)
         {
+            logger.LogError(ex?.Message);
+            
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
             var error = new { code = StatusCodes.Status500InternalServerError, message = "Internal Server Error" };
+            
             await context.Response.WriteAsync(JsonSerializer.Serialize(error));
         }
     }
