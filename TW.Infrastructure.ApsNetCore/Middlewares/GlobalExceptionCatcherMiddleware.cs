@@ -21,13 +21,13 @@ public class GlobalExceptionCatcherMiddleware
         {
             await _next(context);
         }
-        catch (TWException ex)
+        catch (TWException tex)
         {
-            logger.LogWarning(ex?.Message);
+            logger.LogWarning(tex?.Message);
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = StatusCodes.Status200OK;
-            var error = new { code = HttpApiResponseCode.Failure, message = ex?.Message };
+            var error = new { code = HttpApiResponseCode.Failure, message = tex?.Message };
             
             await context.Response.WriteAsync(JsonSerializer.Serialize(error));
         }

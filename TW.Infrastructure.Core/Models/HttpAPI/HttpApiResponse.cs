@@ -2,8 +2,8 @@ namespace TW.Infrastructure.Core.Models.HttpAPI;
 
 public class HttpApiResponse
 {
-    public int Code { get; set; }
-    public string Message { get; set; }
+    public HttpApiResponseCode Code { get; set; }
+    public string? Message { get; set; }
 
     public bool Success
     {

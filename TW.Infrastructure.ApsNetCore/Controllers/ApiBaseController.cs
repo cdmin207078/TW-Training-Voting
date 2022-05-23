@@ -1,5 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
+using TW.Infrastructure.Core.Models.HttpAPI;
 
 namespace TW.Infrastructure.ApsNetCore.Controllers;
 
@@ -8,14 +9,15 @@ namespace TW.Infrastructure.ApsNetCore.Controllers;
 public class ApiBaseController : ControllerBase
 {
     [NonAction]
-    protected IActionResult Success(string message = "", object data = null)
+    protected IActionResult Success(string? message = null, object data = null)
     {
-        return new JsonResult(new { code = 200, message, data });
+        return new JsonResult(new { code = HttpApiResponseCode.Success, message, data });
     }
 
     [NonAction]
-    protected IActionResult Failure(int code = -1, string message = "", object data = null)
+    protected IActionResult Failure(HttpApiResponseCode? code = null, string? message = null, object data = null)
     {
-        return new JsonResult(new { code, message, data });
+        code = code.HasValue ? code.Value : HttpApiResponseCode.Failure;
+        return new JsonResult(new { code , message, data });
     }
 }
