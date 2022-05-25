@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
 using RestSharp;
 using TW.Infrastructure.Core.Components;
@@ -46,21 +47,21 @@ public class VotingApiProxy : IVotingApiProxy
 
     public async Task<GetProgrammeResponse> GetProgramme(string programmeCode)
     {
-        // var response = await _retryProcessor.Execute(_GetProgramme(programmeCode), x => x?.code == (int)VotingApiResponseCode.Failure);
-        // return response.data;
-        
-        var url = GetUrl(programmeCode, "get-programme");
-        var response = await _httpClient.Get<HttpApiResponse<GetProgrammeResponse>>(url);
-        if(!response.Success)
-            throw new TWException(response.Message);
+        // var url = GetUrl(programmeCode, "get-programme");
+        //
+        // var response =
+        //     await _retryProcessor.Execute<Exception, HttpApiResponse<GetProgrammeResponse>>(
+        //         _httpClient.Get<HttpApiResponse<GetProgrammeResponse>>(url), x => x.Success);
+        // if(!response.Success)
+        //     throw new TWException(response.Message);
+        //
+        // return response.Data;
 
-        return response.Data;
+        return await Task.FromResult(default(GetProgrammeResponse));
     }
     
     public async Task<GetProgrammeStatisticResponse> GetProgrammeStatistic(string programmeCode)
     {
-        // var xx = (HttpApiResponse response) => response?.code == (int)HttpApiResponseCode.Failure;
-        
         var url = GetUrl(programmeCode, "get-programme-statistic");
         var response = await _httpClient.Get<HttpApiResponse<GetProgrammeStatisticResponse>>(url);
         if (!response.Success)

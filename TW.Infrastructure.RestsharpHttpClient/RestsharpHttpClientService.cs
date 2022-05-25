@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using TW.Infrastructure.Core.Components.HttpClients;
 using RestSharp;
 
@@ -19,33 +20,47 @@ public class RestsharpHttpClientService : IHttpClientService
         Uri uri,
         Method method,
         Dictionary<string, string>? headers = null,
-        object? body = null) 
+        object? body = null)
         where TResponse : class
     {
-        if (uri == null)
-            throw new ArgumentNullException(nameof(uri));
+        var input = new { uri, method, headers, body };
         
-        var request = new RestRequest(uri);
-        if (headers is not null && headers.Any())
-            request.AddHeaders(headers);
-        
-        if (body is not null)
-            request.AddJsonBody(body);
-        
-        Task<TResponse> response;
-        
-        if (method == Method.Get)
-            response = _client.GetAsync<TResponse>(request);
-        else if (method == Method.Post)
-            response = _client.PostAsync<TResponse>(request);
-        else if (method == Method.Put)
-            response = _client.PutAsync<TResponse>(request);
-        else if (method == Method.Delete)
-            response = _client.DeleteAsync<TResponse>(request);
-        else 
-            throw new ArgumentException($"Not currently supported method type: {method}");
+        try
+        {
+            if (uri == null)
+                throw new ArgumentNullException(nameof(uri));
+            
+            var request = new RestRequest(uri);
+            if (headers is not null && headers.Any())
+                request.AddHeaders(headers);
+            
+            if (body is not null)
+                request.AddJsonBody(body);
+            
+            Task<TResponse> response;
+            
+            if (method == Method.Get)
+                response = _client.GetAsync<TResponse>(request);
+            else if (method == Method.Post)
+                response = _client.PostAsync<TResponse>(request);
+            else if (method == Method.Put)
+                response = _client.PutAsync<TResponse>(request);
+            else if (method == Method.Delete)
+                response = _client.DeleteAsync<TResponse>(request);
+            else 
+                throw new ArgumentException($"Not currently supported method type: {method}");
+            
+            var output = await response;
+            
+            _logger.LogInformation($"{JsonSerializer.Serialize(new { request = input, response = output })}");
 
-        return await response;
+            return output;
+        }
+        catch (Exception e)
+        {
+            _logger.LogError($"{JsonSerializer.Serialize(new { request = input, response = e?.Message ?? e.InnerException?.Message })}");
+            throw;
+        }
     }
 
     public Task<TResponse> Get<TResponse>(string url, Dictionary<string, string>? headers = null)

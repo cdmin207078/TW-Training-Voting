@@ -6,4 +6,5 @@ public interface IVotingRepository
 {
     Task<int> GetVotingCount(MobilePhoneNumber mobilePhoneNumber, CodeNumber programmeCodeNumber);
     Task Voting(Voting voting);
+    Task Greeting();
 }

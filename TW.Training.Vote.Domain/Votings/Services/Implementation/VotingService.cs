@@ -16,6 +16,17 @@ public class VotingService : IVotingService
     public async Task Voting(SubmitVotingInput input)
     {
         var voting = new Voting(input, _programmeRepository, _votingRepository);
-        await _votingRepository.Voting(voting);
+
+        var rightWay = await ChoiceRightWay("");
+        
+        if (rightWay)
+            await _votingRepository.Voting(voting);
+        else
+            await _votingRepository.Greeting();
+    }
+
+    public Task<bool> ChoiceRightWay(string flag)
+    {
+        throw new NotImplementedException();
     }
 }

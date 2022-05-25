@@ -14,33 +14,51 @@ public class RetryProcessor : IRetryProcessor
         _logger = logger;
     }
     
-    private void OnRetry(Exception exception, int retryIndex, Context context)
+    private void OnRetry(Exception exception, TimeSpan retryIndex, Context context)
     {
         _logger.LogInformation($"#{retryIndex}: {JsonSerializer.Serialize(context)}, Exception: {exception.Message}");
     }
     
-    private void OnRetry<TResult>(DelegateResult<TResult> result, int retryIndex, Context context)
+    private void OnRetry<TResult>(DelegateResult<TResult> result, TimeSpan retryIndex, Context context)
     {
         _logger.LogInformation($"#{retryIndex}: {JsonSerializer.Serialize(context)}, Result: {result.Result}");
     }
     
-    public TResult Execute<TException, TResult>(Func<TResult> action, int retryCount = 3) where TException : Exception
+    public TResult Execute<TException, TResult>(Func<TResult> action, TimeSpan[] retryTimes) where TException : Exception
     {
-        return Policy.Handle<TException>().Retry(retryCount, OnRetry).Execute(ctx => action.Invoke(), null);
+        return Policy.Handle<TException>().WaitAndRetry(retryTimes, OnRetry).Execute(ctx => action.Invoke(), null);
+    }
+    
+    public Task<TResult> Execute<TException, TResult>(Task<TResult> action, TimeSpan[] retryTimes) where TException : Exception
+    {
+        return Policy.Handle<TException>().WaitAndRetryAsync(retryTimes, OnRetry).ExecuteAsync(() => action);
     }
 
-    public Task<TResult> Execute<TException, TResult>(Task<TResult> action, int retryCount = 3) where TException : Exception
+    public TResult Execute<TResult>(Func<TResult> action, Func<TResult, bool> resultPredicate, TimeSpan[] retryTimes)
     {
-        return Policy.Handle<TException>().RetryAsync(retryCount, OnRetry).ExecuteAsync(ctx => action, null);
+        return Policy.HandleResult(resultPredicate).WaitAndRetry(retryTimes, OnRetry).Execute(ctx => action.Invoke(), null);
     }
 
-    public TResult Execute<TResult>(Func<TResult> action, Func<TResult, bool> resultPredicate, int retryCount = 3)
+    public Task<TResult> Execute<TResult>(Task<TResult> action, Func<TResult, bool> resultPredicate, TimeSpan[] retryTimes)
     {
-        return Policy.HandleResult(resultPredicate).Retry(retryCount, OnRetry).Execute(ctx => action.Invoke(), null);
+        return Policy.HandleResult(resultPredicate).WaitAndRetryAsync(retryTimes, OnRetry).ExecuteAsync(() => action);
     }
 
-    public Task<TResult> Execute<TResult>(Task<TResult> action, Func<TResult, bool> resultPredicate, int retryCount = 3)
+    public TResult Execute<TException, TResult>(Func<TResult> action, Func<TResult, bool> resultPredicate, TimeSpan[] retryTimes)
+        where TException : Exception
     {
-        return Policy.HandleResult(resultPredicate).RetryAsync(retryCount, OnRetry).ExecuteAsync(ctx => action, null);
+        var forResultMatchPolicy = Policy.HandleResult(resultPredicate).WaitAndRetry(retryTimes, OnRetry);
+        var forExceptionPolicy = Policy.Handle<TException>().WaitAndRetry(retryTimes, OnRetry);
+
+        return forResultMatchPolicy.Wrap(forExceptionPolicy).Execute(() => action.Invoke());
+    }
+
+    public Task<TResult> Execute<TException, TResult>(Task<TResult> action, Func<TResult, bool> resultPredicate, TimeSpan[] retryTimes)
+        where TException : Exception
+    {
+        var forResultMatchPolicy = Policy.HandleResult(resultPredicate).WaitAndRetryAsync(retryTimes, OnRetry);
+        var forExceptionPolicy = Policy.Handle<TException>().WaitAndRetryAsync(retryTimes, OnRetry);
+
+        return forResultMatchPolicy.WrapAsync(forExceptionPolicy).ExecuteAsync(() => action);
     }
 }

@@ -41,4 +41,9 @@ public class VotingRepository : IVotingRepository
 
         return _ctx.SaveChangesAsync();
     }
+
+    public Task Greeting()
+    {
+        throw new NotImplementedException();
+    }
 }
