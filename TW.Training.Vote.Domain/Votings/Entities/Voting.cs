@@ -8,6 +8,11 @@ public class Voting
 {
     #region Contructors
 
+    public Voting()
+    {
+        
+    }
+
     public Voting(SubmitVotingInput input, IProgrammeRepository programmeRepository, IVotingRepository votingRepository)
     {
         if (input == null) 

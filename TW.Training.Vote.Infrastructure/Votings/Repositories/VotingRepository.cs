@@ -42,7 +42,17 @@ public class VotingRepository : IVotingRepository
         return _ctx.SaveChangesAsync();
     }
 
+    public Task<Voting> GetVoting()
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Greeting()
+    {
+        throw new NotImplementedException();
+    }
+
+    public ISubmitVotingModel GetSubmitVotingModel(string name)
     {
         throw new NotImplementedException();
     }

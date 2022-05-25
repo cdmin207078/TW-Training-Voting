@@ -17,16 +17,21 @@ public class VotingService : IVotingService
     {
         var voting = new Voting(input, _programmeRepository, _votingRepository);
 
-        var rightWay = await ChoiceRightWay("");
-        
-        if (rightWay)
+        var existVoting = await _votingRepository.GetVoting();
+
+        if (existVoting is null)
             await _votingRepository.Voting(voting);
         else
             await _votingRepository.Greeting();
     }
 
-    public Task<bool> ChoiceRightWay(string flag)
+    public async Task Submit()
     {
-        throw new NotImplementedException();
+        var existSubmitVotingModel = _votingRepository.GetSubmitVotingModel(string.Empty);
+        
+        if(existSubmitVotingModel is null)
+            await _votingRepository.Voting(null);
+        else 
+            await _votingRepository.Greeting();
     }
 }
